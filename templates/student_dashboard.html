@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Course Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Register for Courses</h2>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {% if '❌' in message or 'error' in message.lower() or 'invalid' in message.lower() %}error{% elif '⚠️' in message %}warning{% else %}success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="dashboard">
+            <div class="nav-links" style="margin-bottom: 2rem;">
+                <a href="/student/my_courses">View My Registered Courses</a>
+            </div>
+            
+            <form method="post">
+                <div class="course-grid">
+                    {% for course in courses %}
+                    <div class="course-card">
+                        <div class="form-group">
+                            <input type="checkbox" id="course_{{ course.course_id }}" name="courses" value="{{ course.course_id }}"
+                                   {% if course.course_id in registered %}checked{% endif %}>
+                            <label for="course_{{ course.course_id }}">
+                                <span class="course-title">{{ course.course_id }} - {{ course.course_name }}</span>
+                            </label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button type="submit">Submit Registration</button>
+            </form>
+        </div>
+        <a href="/logout" class="back-link">Logout</a>
+    </div>
+</body>
+</html>

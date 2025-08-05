@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registered Students - Course Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Registered Students</h2>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {% if '❌' in message or 'error' in message.lower() or 'invalid' in message.lower() %}error{% elif '⚠️' in message %}warning{% else %}success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="dashboard">
+            {% if students %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Student Name</th>
+                            <th>Registered Courses</th>
+                            <th>Course Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ student.rollno }}</td>
+                            <td>{{ student.name }}</td>
+                            <td>
+                                {% if student.registered_courses %}
+                                    {{ student.registered_courses }}
+                                {% else %}
+                                    <span style="color: #7f8c8d; font-style: italic;">No courses registered</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="status {% if student.course_count > 0 %}available{% else %}full{% endif %}">
+                                    {{ student.course_count }} course{{ 's' if student.course_count != 1 else '' }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div style="text-align: center; padding: 2rem; color: #7f8c8d;">
+                    <h3>No students registered yet</h3>
+                    <p>Students will appear here once they register for courses.</p>
+                </div>
+            {% endif %}
+        </div>
+        <a href="/admin/dashboard" class="back-link">Back to Dashboard</a>
+    </div>
+</body>
+</html> 

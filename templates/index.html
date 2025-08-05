@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Course Registration Portal</h1>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {% if '❌' in message or 'error' in message.lower() or 'invalid' in message.lower() %}error{% elif '⚠️' in message %}warning{% else %}success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="nav-links">
+            <a href="/admin/login">Admin Login</a>
+            <a href="/student/register">Student Register</a>
+            <a href="/student/login">Student Login</a>
+        </div>
+    </div>
+</body>
+</html>

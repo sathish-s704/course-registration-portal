@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Registered Courses - Course Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>My Registered Courses</h2>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {% if '❌' in message or 'error' in message.lower() or 'invalid' in message.lower() %}error{% elif '⚠️' in message %}warning{% else %}success{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="dashboard">
+            {% if student_info %}
+                <div style="text-align: center; margin-bottom: 2rem; padding: 1rem; background: var(--primary-gradient); color: white; border-radius: var(--border-radius);">
+                    <h3>Welcome, {{ student_info.name }}!</h3>
+                    <p>Here are your registered courses:</p>
+                </div>
+            {% endif %}
+            
+            {% if courses %}
+                <div class="course-grid">
+                    {% for course in courses %}
+                    <div class="course-card">
+                        <div class="course-title">{{ course.course_id }} - {{ course.course_name }}</div>
+                        <div class="course-info">
+                            <span class="status available">Registered</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem; padding: 1rem; background: var(--success-gradient); color: white; border-radius: var(--border-radius);">
+                    <h4>Total Courses: {{ courses|length }}</h4>
+                    <p>You are successfully registered for {{ courses|length }} course{{ 's' if courses|length != 1 else '' }}.</p>
+                </div>
+            {% else %}
+                <div style="text-align: center; padding: 3rem; color: #7f8c8d;">
+                    <h3>No courses registered yet</h3>
+                    <p>You haven't registered for any courses yet.</p>
+                    <div style="margin-top: 2rem;">
+                        <a href="/student/dashboard" style="display: inline-block; margin: 0 1rem;">Register for Courses</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="/student/dashboard" class="back-link">Back to Dashboard</a>
+            <a href="/logout" class="back-link" style="margin-left: 1rem;">Logout</a>
+        </div>
+    </div>
+</body>
+</html> 
